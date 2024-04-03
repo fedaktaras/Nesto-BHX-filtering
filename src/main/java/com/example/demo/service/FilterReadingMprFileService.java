@@ -5,7 +5,11 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import com.example.demo.model.MprFileAnalyzer;
 
 public class FilterReadingMprFileService implements FilterService {
 
@@ -28,11 +32,16 @@ public class FilterReadingMprFileService implements FilterService {
                 return false; // File is considered invalid if it cannot be read with either encoding
             }
         }
-
-        // Assuming lines were successfully read by this point
         String content = String.join(System.lineSeparator(), lines);
+
+        MprFileAnalyzer mprFileAnalyzer = new MprFileAnalyzer(content);
         if (content.contains("$")) {
             String logMessage = "File " + file.getName() + " contains contours";
+            logger.add(logMessage + "\n");
+            return false;
+        }
+        if (!mprFileAnalyzer.haveSawInXOnly()) {
+            String logMessage = "File " + file.getName() + " contains Not X Saw";
             logger.add(logMessage + "\n");
             return false;
         }
