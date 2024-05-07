@@ -7,6 +7,7 @@ module com.example.demo {
     requires net.synedra.validatorfx;
     requires org.kordamp.ikonli.javafx;
     requires eu.hansolo.tilesfx;
+    requires static lombok;
 
     opens com.example.demo to javafx.fxml;
     exports com.example.demo;
